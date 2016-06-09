@@ -1,6 +1,6 @@
 {
   "name": "react-higher-event",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Declarative React API to listen to higher events",
   "main": "lib/index.js",
   "scripts": {
@@ -39,6 +39,7 @@
     "flow-bin": "^0.26.0",
     "jest-cli": "^12.1.1",
     "react": "^15.1.0",
+    "react-addons-test-utils": "^15.1.0",
     "react-dom": "^15.1.0",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
@@ -46,5 +47,18 @@
   "peerDependencies": {
     "react": "^15.1.0",
     "react-dom": "^15.1.0"
+  },
+  "jest": {
+    "rootDir": "",
+    "persistModuleRegistryBetweenSpecs": true,
+    "modulePathIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ],
+    "preprocessorIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ],
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/"
+    ]
   }
 }

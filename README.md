@@ -48,8 +48,3 @@ Use this component where you want to listen to higher events:
   </div>
 </ReactHigherEvent>
 ```
-
-## TODO
-
-- Tests
-- Performance tests (maybe batch `forceUpdate` calls)
