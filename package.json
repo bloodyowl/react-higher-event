@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "Declarative React API to listen to higher events",
   "main": "lib/index.js",
+  "files": [
+    "lib",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "start": "rm -fr lib/ && babel src --out-dir lib --ignore='__tests__'",
     "examples": "node scripts/examples.js",
