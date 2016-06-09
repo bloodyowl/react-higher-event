@@ -11,7 +11,8 @@
   "scripts": {
     "start": "rm -fr lib/ && babel src --out-dir lib --ignore='__tests__'",
     "examples": "node scripts/examples.js",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "pub": "npm test && npm start && npm publish"
   },
   "repository": {
     "type": "git",
