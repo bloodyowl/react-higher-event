@@ -1,8 +1,50 @@
 # react-higher-event
 
-**Experimental**
-
 > Declarative API to listen to events outside of a component
+
+## What issues does it solve?
+
+React synthetic event system doesn't interact completely with plain DOM events. This means that listeners attached using `addEventListener` in your lifecycles hooks will not be in the same phase as the one you declare using React props.
+
+```javascript
+React.createClass({
+  getInitialState() {
+    return {
+      isOpened: false,
+    }
+  }
+  componentDidMount() {
+    document.body.addEventListener("click", this.close)
+  }
+  close() {
+    this.setState({
+      isOpened: false,
+    })
+  }
+  open(event) {
+    event.stopPropagation() // will not stop propagation to `document.body`
+    this.setState({
+      isOpened: true,
+    })
+  }
+  render() {
+    return (
+      <div>
+        <div onClick={this.open}>
+          open
+        </div>
+        {this.state.isOpened &&
+          <div>
+            {/* some stuff */}
+          </div>
+        }
+      </div>
+    )
+  }
+})
+```
+
+ReactHigherEvent solves this issue by using the React event system and making it accessible declaratively anywhere. Just pass your listener to `ReactHigherEvent` props, and it will work!
 
 ## Install
 
