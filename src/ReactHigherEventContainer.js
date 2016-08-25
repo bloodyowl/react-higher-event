@@ -3,6 +3,7 @@ import React, { Component } from "react"
 import { Element as ReactElement } from "react"
 
 import ReactHigherEventContextTypes from "./ReactHigherEventContextTypes"
+import ReactHigherEventProxyContextTypes from "./ReactHigherEventProxyContextTypes"
 
 type EventProps = {
   [key: string]: Function,
@@ -16,7 +17,9 @@ class ReactHigherEventContainer extends Component<void, Props, void> {
     super(props)
     this.subscribe = this.subscribe.bind(this)
     this.handleEvent = this.handleEvent.bind(this)
+    this.proxySubscribe = this.proxySubscribe.bind(this)
     this.events = new Map()
+    this.proxySubscribers = new Set()
   }
   subscribe(eventType: string, handler: Function): Function {
     let eventSubscribers = this.events.get(eventType)
@@ -25,7 +28,7 @@ class ReactHigherEventContainer extends Component<void, Props, void> {
       this.events.set(eventType, eventSubscribers)
     }
     eventSubscribers.add(handler)
-    this.forceUpdate()
+    this.update()
     return () => {
       const eventSubscribers = this.events.get(eventType)
       if(eventSubscribers) {
@@ -33,9 +36,19 @@ class ReactHigherEventContainer extends Component<void, Props, void> {
         if(eventSubscribers.size === 0) {
           this.events.delete(eventType)
         }
-        this.forceUpdate()
+        this.update()
       }
     }
+  }
+  proxySubscribe(handler: Function): Function {
+    this.proxySubscribers.add(handler)
+    return () => {
+      this.proxySubscribers.delete(handler)
+    }
+  }
+  update(): void {
+    this.forceUpdate()
+    this.proxySubscribers.forEach((func) => func())
   }
   handleEvent(eventType: string, event: SyntheticEvent) {
     if(!this.events.has(eventType)) {
@@ -59,6 +72,11 @@ class ReactHigherEventContainer extends Component<void, Props, void> {
       higherEvent: {
         subscribe: this.subscribe,
       },
+      higherEventProxy: {
+        handleEvent: this.handleEvent,
+        events: this.events,
+        subscribe: this.proxySubscribe,
+      }
     }
   }
   render(): ReactElement {
@@ -71,7 +89,10 @@ class ReactHigherEventContainer extends Component<void, Props, void> {
   }
 }
 
-ReactHigherEventContainer.childContextTypes = ReactHigherEventContextTypes
+ReactHigherEventContainer.childContextTypes = {
+  ...ReactHigherEventContextTypes,
+  ...ReactHigherEventProxyContextTypes
+}
 
 type Props = {
   children?: any,
