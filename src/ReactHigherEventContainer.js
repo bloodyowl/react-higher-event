@@ -62,11 +62,12 @@ class ReactHigherEventContainer extends Component<void, Props, void> {
     }
   }
   render(): ReactElement {
-    const { children, ...props } = this.props
+    const { children, component, ...props } = this.props
+    const Component = component || "div"
     return (
-      <div {...props} {...this.getEventProps()}>
+      <Component {...props} {...this.getEventProps()}>
         {children}
-      </div>
+      </Component>
     )
   }
 }
@@ -75,6 +76,7 @@ ReactHigherEventContainer.childContextTypes = ReactHigherEventContextTypes
 
 type Props = {
   children?: any,
+  component?: Function,
 }
 
 export default ReactHigherEventContainer

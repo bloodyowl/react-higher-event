@@ -77,6 +77,17 @@ ReactDOM.render(
 )
 ```
 
+This component accepts children and a ``component`` property so you can replace
+the default ``div`` used.
+
+```javascript
+ReactDOM.render(
+  <ReactHigherEventContainer component={ CustomThing }>
+    {/* my components */}
+  </ReactHigherEventContainer>
+)
+```
+
 ### ReactHigherEvent
 
 Use this component where you want to listen to higher events:
