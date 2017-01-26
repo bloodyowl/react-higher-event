@@ -86,7 +86,7 @@ Use this component where you want to listen to higher events:
   onClick={this.handleGlobalClick}
 >
   { /* note that you will probably want to stopPropagating at the top level of your component */ }
-  <div onClick={ (event) => event.stopPropagation() }>
+  <div onClick={(event) => event.stopPropagation()}>
     helloworld
   </div>
 </ReactHigherEvent>
