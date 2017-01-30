@@ -164,4 +164,35 @@ describe("ReactHigherEventContainer", () => {
 
   })
 
+  it("should let us use other tags for ReactHigherEventContainer", () => {
+    const tree = ReactTestUtils.renderIntoDocument(
+      <ReactHigherEventContainer component={ "span" }>
+        <a></a>
+      </ReactHigherEventContainer>
+    )
+
+    expect(() => {
+      const div = ReactTestUtils.findRenderedDOMComponentWithTag(tree, "div")
+    }).toThrow()
+
+    const span = ReactTestUtils.findRenderedDOMComponentWithTag(tree, "span")
+    expect(span).toBeTruthy()
+  })
+
+  it("should let us use custom component for ReactHigherEventContainer", () => {
+    const Compo = (props) => <article>{ props.children }</article>
+    const tree = ReactTestUtils.renderIntoDocument(
+      <ReactHigherEventContainer component={ Compo }>
+        <a></a>
+      </ReactHigherEventContainer>
+    )
+
+    expect(() => {
+      const div = ReactTestUtils.findRenderedDOMComponentWithTag(tree, "div")
+    }).toThrow()
+
+    const span = ReactTestUtils.findRenderedDOMComponentWithTag(tree, "article")
+    expect(span).toBeTruthy()
+  })
+
 })

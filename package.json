@@ -1,12 +1,10 @@
 {
   "name": "react-higher-event",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Declarative React API to listen to higher events",
   "main": "lib/index.js",
   "files": [
-    "lib",
-    "LICENSE",
-    "README.md"
+    "lib"
   ],
   "scripts": {
     "start": "rm -fr lib/ && babel src --out-dir lib --ignore='__tests__'",
@@ -14,10 +12,7 @@
     "test": "jest --verbose",
     "pub": "npm test && npm start && npm publish"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/bloodyowl/react-higher-event.git"
-  },
+  "repository": "https://github.com/bloodyowl/react-higher-event.git",
   "keywords": [
     "react",
     "higher-event",
@@ -26,10 +21,6 @@
   ],
   "author": "bloodyowl <mlbli@me.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/bloodyowl/react-higher-event/issues"
-  },
-  "homepage": "https://github.com/bloodyowl/react-higher-event#readme",
   "devDependencies": {
     "babel-cli": "^6.9.0",
     "babel-core": "^6.9.1",
