@@ -4,6 +4,7 @@ jest
 const React = require("react")
 const ReactDOM = require("react-dom")
 const ReactHigherEventContainer = require("../ReactHigherEventContainer").default
+const ReactHigherEventProxy = require("../ReactHigherEventProxy").default
 const ReactHigherEvent = require("../ReactHigherEvent").default
 const ReactTestUtils = require("react-addons-test-utils")
 
@@ -165,6 +166,7 @@ describe("ReactHigherEventContainer", () => {
   })
 
   it("should let us use other tags for ReactHigherEventContainer", () => {
+
     const tree = ReactTestUtils.renderIntoDocument(
       <ReactHigherEventContainer component={ "span" }>
         <a></a>
@@ -177,9 +179,11 @@ describe("ReactHigherEventContainer", () => {
 
     const span = ReactTestUtils.findRenderedDOMComponentWithTag(tree, "span")
     expect(span).toBeTruthy()
+
   })
 
   it("should let us use custom component for ReactHigherEventContainer", () => {
+
     const Compo = (props) => <article>{ props.children }</article>
     const tree = ReactTestUtils.renderIntoDocument(
       <ReactHigherEventContainer component={ Compo }>
@@ -193,6 +197,73 @@ describe("ReactHigherEventContainer", () => {
 
     const span = ReactTestUtils.findRenderedDOMComponentWithTag(tree, "article")
     expect(span).toBeTruthy()
+
+  })
+
+  it("should proxy to root container from across an iframe", () => {
+
+    let clickCount = 0
+
+    class Iframe extends React.Component {
+      componentDidMount() {
+        const doc = ReactDOM.findDOMNode(this).contentWindow.document
+        doc.open()
+        doc.write("<!doctype html><html><body><div></div></body></html>")
+        doc.close()
+
+        const mountTarget = doc.body.children[0]
+        ReactDOM.unstable_renderSubtreeIntoContainer(this, this.props.children, mountTarget)
+      }
+      render() {
+        return <iframe />
+      }
+    }
+
+    class ReceiverComponent extends React.Component {
+      constructor(props) {
+        super(props)
+        this.handleGlobalClick = this.handleGlobalClick.bind(this)
+      }
+      handleGlobalClick(event) {
+        ++clickCount
+        expect(event.target.ownerDocument).not.toBe(this.node.ownerDocument)
+      }
+      render() {
+        return (
+          <ReactHigherEvent
+            onClick={this.handleGlobalClick}
+          >
+            <div ref={(c) => this.node = c}>outside iframe</div>
+          </ReactHigherEvent>
+        )
+      }
+    }
+
+    let innerNode
+    class Inner extends React.Component {
+      render() {
+        return <div ref={(c) => innerNode = c}>inside iframe</div>
+      }
+    }
+
+    const mount = document.body.appendChild(document.createElement("div"))
+    const tree = ReactDOM.render((
+      <ReactHigherEventContainer>
+        <div>
+          <Iframe>
+            <ReactHigherEventProxy>
+              <Inner />
+            </ReactHigherEventProxy>
+          </Iframe>
+          <ReceiverComponent />
+        </div>
+      </ReactHigherEventContainer>
+    ), mount)
+
+    ReactTestUtils.Simulate.click(innerNode)
+    expect(clickCount).toBe(1)
+    mount.parentNode.removeChild(mount)
+
   })
 
 })
