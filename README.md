@@ -77,6 +77,17 @@ ReactDOM.render(
 )
 ```
 
+This component accepts children and a ``component`` property so you can replace
+the default ``div`` used.
+
+```javascript
+ReactDOM.render(
+  <ReactHigherEventContainer component={ CustomThing }>
+    {/* my components */}
+  </ReactHigherEventContainer>
+)
+```
+
 ### ReactHigherEvent
 
 Use this component where you want to listen to higher events:
@@ -85,7 +96,8 @@ Use this component where you want to listen to higher events:
 <ReactHigherEvent
   onClick={this.handleGlobalClick}
 >
-  <div>
+  { /* note that you will probably want to stopPropagating at the top level of your component */ }
+  <div onClick={(event) => event.stopPropagation()}>
     helloworld
   </div>
 </ReactHigherEvent>
