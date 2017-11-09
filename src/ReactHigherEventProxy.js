@@ -18,12 +18,16 @@ class ReactHigherEventProxy extends Component<void, Props, void> {
   }
   getEventProps(): EventProps {
     const { higherEventProxy } = this.context
-    return Array.from(higherEventProxy.events.keys()).reduce((acc, key) => {
-      return {
-        ...acc,
-        [key]: higherEventProxy.handleEvent.bind(null, key),
+    const eventProps = {}
+    higherEventProxy.events.forEach((key) => {
+      eventProps[key] = (event) => {
+        if(this.props[key]) {
+          this.props[key](event)
+        }
+        higherEventProxy.handleEvent(key, event)
       }
-    }, {})
+    })
+    return eventProps
   }
   render(): ReactElement {
     const { children, ...props } = this.props
