@@ -3,10 +3,10 @@ jest
 
 const React = require("react")
 const ReactDOM = require("react-dom")
+const TestUtils = require("react-dom/test-utils")
 const ReactHigherEventContainer = require("../ReactHigherEventContainer").default
 const ReactHigherEventProxy = require("../ReactHigherEventProxy").default
 const ReactHigherEvent = require("../ReactHigherEvent").default
-const ReactTestUtils = require("react-addons-test-utils")
 
 describe("ReactHigherEventContainer", () => {
 
@@ -31,7 +31,7 @@ describe("ReactHigherEventContainer", () => {
       }
     }
 
-    const tree = ReactTestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <ReactHigherEventContainer>
         <div>
           <ReceiverComponent />
@@ -39,7 +39,7 @@ describe("ReactHigherEventContainer", () => {
       </ReactHigherEventContainer>
     )
 
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(tree))
+    TestUtils.Simulate.click(ReactDOM.findDOMNode(tree))
 
   })
 
@@ -65,7 +65,7 @@ describe("ReactHigherEventContainer", () => {
       }
     }
 
-    const tree = ReactTestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <ReactHigherEventContainer>
         <div>
           <ReceiverComponent />
@@ -74,7 +74,7 @@ describe("ReactHigherEventContainer", () => {
       </ReactHigherEventContainer>
     )
 
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(tree))
+    TestUtils.Simulate.click(ReactDOM.findDOMNode(tree))
     expect(clickCount).toBe(2)
 
   })
@@ -107,7 +107,7 @@ describe("ReactHigherEventContainer", () => {
       }
     }
 
-    const tree = ReactTestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <ReactHigherEventContainer>
         <div>
           <ReceiverComponent />
@@ -115,8 +115,8 @@ describe("ReactHigherEventContainer", () => {
       </ReactHigherEventContainer>
     )
 
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(tree))
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(tree))
+    TestUtils.Simulate.click(ReactDOM.findDOMNode(tree))
+    TestUtils.Simulate.click(ReactDOM.findDOMNode(tree))
 
   })
 
@@ -151,7 +151,7 @@ describe("ReactHigherEventContainer", () => {
       }
     }
 
-    const tree = ReactTestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <ReactHigherEventContainer>
         <div>
           <ReceiverComponent />
@@ -159,25 +159,25 @@ describe("ReactHigherEventContainer", () => {
       </ReactHigherEventContainer>
     )
 
-    const receiver = ReactTestUtils.findRenderedComponentWithType(tree, ReceiverComponent)
-    const div = ReactTestUtils.findRenderedDOMComponentWithTag(receiver, "div")
-    ReactTestUtils.Simulate.click(div)
+    const receiver = TestUtils.findRenderedComponentWithType(tree, ReceiverComponent)
+    const div = TestUtils.findRenderedDOMComponentWithTag(receiver, "div")
+    TestUtils.Simulate.click(div)
 
   })
 
   it("should let us use other tags for ReactHigherEventContainer", () => {
 
-    const tree = ReactTestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <ReactHigherEventContainer component={ "span" }>
         <a></a>
       </ReactHigherEventContainer>
     )
 
     expect(() => {
-      const div = ReactTestUtils.findRenderedDOMComponentWithTag(tree, "div")
+      const div = TestUtils.findRenderedDOMComponentWithTag(tree, "div")
     }).toThrow()
 
-    const span = ReactTestUtils.findRenderedDOMComponentWithTag(tree, "span")
+    const span = TestUtils.findRenderedDOMComponentWithTag(tree, "span")
     expect(span).toBeTruthy()
 
   })
@@ -185,17 +185,17 @@ describe("ReactHigherEventContainer", () => {
   it("should let us use custom component for ReactHigherEventContainer", () => {
 
     const Compo = (props) => <article>{ props.children }</article>
-    const tree = ReactTestUtils.renderIntoDocument(
+    const tree = TestUtils.renderIntoDocument(
       <ReactHigherEventContainer component={ Compo }>
         <a></a>
       </ReactHigherEventContainer>
     )
 
     expect(() => {
-      const div = ReactTestUtils.findRenderedDOMComponentWithTag(tree, "div")
+      const div = TestUtils.findRenderedDOMComponentWithTag(tree, "div")
     }).toThrow()
 
-    const span = ReactTestUtils.findRenderedDOMComponentWithTag(tree, "article")
+    const span = TestUtils.findRenderedDOMComponentWithTag(tree, "article")
     expect(span).toBeTruthy()
 
   })
@@ -260,7 +260,7 @@ describe("ReactHigherEventContainer", () => {
       </ReactHigherEventContainer>
     ), mount)
 
-    ReactTestUtils.Simulate.click(innerNode)
+    TestUtils.Simulate.click(innerNode)
     expect(clickCount).toBe(1)
     mount.parentNode.removeChild(mount)
 
