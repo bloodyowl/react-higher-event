@@ -1,7 +1,9 @@
+[options]
+esproposal.class_instance_fields=enable
+esproposal.class_static_fields=enable
+
 [ignore]
 
 [include]
 
 [libs]
-
-[options]

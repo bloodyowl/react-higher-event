@@ -99,7 +99,7 @@ describe("ReactHigherEventContainer", () => {
       render() {
         return (
           <ReactHigherEvent
-            onClick={this.state.clickCount > 0 ? this.handleGlobalClick : undefined}
+            onClick={this.state.clickCount > 0 ? this.handleGlobalClick : null}
           >
             <div>ok</div>
           </ReactHigherEvent>
@@ -262,6 +262,174 @@ describe("ReactHigherEventContainer", () => {
 
     TestUtils.Simulate.click(innerNode)
     expect(clickCount).toBe(1)
+    mount.parentNode.removeChild(mount)
+
+  })
+
+  it("shouldn’t re-render when other components add or remove subscribers", () => {
+
+    let renderCount = 0
+    class ReceiverComponent extends React.Component {
+      state = { clicked: false }
+      handleGlobalClick = (event) => {
+        if(!this.state.clicked) {
+          this.setState({ clicked: true })
+        }
+      }
+      render() {
+        ++renderCount
+        return (
+          <ReactHigherEvent
+            onClick={this.handleGlobalClick}
+          >
+            {this.clicked ? (
+              <ReactHigherEvent onMouseOver={() => {}}>
+                <div>ok</div>
+              </ReactHigherEvent>
+            ) : (
+              <div>ok</div>
+            )}
+          </ReactHigherEvent>
+        )
+      }
+    }
+
+    const tree = TestUtils.renderIntoDocument(
+      <ReactHigherEventContainer>
+        <ReceiverComponent />
+      </ReactHigherEventContainer>
+    )
+
+    // Initial render adds onClick handler which triggers additional render
+    expect(renderCount).toBe(2)
+
+    // Click updates state, render adds new component with onMouseOver handler
+    TestUtils.Simulate.click(ReactDOM.findDOMNode(tree))
+    expect(renderCount).toBe(3)
+
+    // Mouseover should leave render count unchanged
+    TestUtils.Simulate.mouseOver(ReactDOM.findDOMNode(tree))
+    expect(renderCount).toBe(3)
+
+  })
+
+  it("should only update proxy when event types are added or removed", () => {
+
+    let renderCount = 0
+    let clickCount = 0
+    let mouseOverCount = 0
+    let stage2ClickCount = 0
+    class ReceiverComponent extends React.Component {
+      state = { stage: 0 }
+      handleGlobalClick = (event) => {
+        ++clickCount
+        if(this.state.stage === 0) {
+          this.setState({ stage: 1 })
+        }
+      }
+      handleGlobalMouseOver = (event) => {
+        ++mouseOverCount
+        if(this.state.stage === 1) {
+          this.setState({ stage: 2 })
+        }
+      }
+      render() {
+        ++renderCount
+        return (
+          <ReactHigherEvent
+            onClick={this.handleGlobalClick}
+            onMouseOver={ this.state.stage ? this.handleGlobalMouseOver : null }
+          >
+            {this.state.stage === 2 ? (
+              <ReactHigherEvent onClick={ () => ++stage2ClickCount }>
+                <div>ok</div>
+              </ReactHigherEvent>
+            ) : (
+              <div>ok</div>
+            )}
+          </ReactHigherEvent>
+        )
+      }
+    }
+
+    class Iframe extends React.Component {
+      componentDidMount() {
+        const doc = ReactDOM.findDOMNode(this).contentWindow.document
+        doc.open()
+        doc.write("<!doctype html><html><body><div></div></body></html>")
+        doc.close()
+
+        const mountTarget = doc.body.children[0]
+        ReactDOM.unstable_renderSubtreeIntoContainer(this, this.props.children, mountTarget)
+      }
+      render() {
+        return <iframe />
+      }
+    }
+
+    let proxyRef
+    let proxyNode
+    const proxyStates = []
+    class IframeInside extends React.Component {
+      handleProxyNode = (ref) => proxyNode = ref
+      handleProxyRef = (ref) => {
+        if(ref) proxyStates.push(ref.state)
+        proxyRef = ref
+      }
+      render() {
+        return (
+          <ReactHigherEventProxy
+            ref={this.handleProxyRef}
+            handleRef={this.handleProxyNode}
+          >
+            <div />
+          </ReactHigherEventProxy>
+        )
+      }
+    }
+
+    const mount = document.body.appendChild(document.createElement("div"))
+    const tree = ReactDOM.render((
+      <ReactHigherEventContainer>
+        <div>
+          <Iframe>
+            <IframeInside />
+          </Iframe>
+          <ReceiverComponent />
+        </div>
+      </ReactHigherEventContainer>
+    ), mount)
+
+    // Initial render adds onClick handler which triggers additional render
+    expect(renderCount).toBe(2)
+    // Proxy state should have been updated since mounting from onClick handler
+    expect(proxyStates[proxyStates.length - 1]).not.toBe(proxyRef.state)
+    proxyStates.push(proxyRef.state)
+
+    TestUtils.Simulate.mouseOver(proxyNode)
+    TestUtils.Simulate.click(proxyNode)
+    // Click updates state, render adds onMouseOver handler (2 renders)
+    expect(renderCount).toBe(4)
+    // New event type for eventProps triggers new state
+    expect(proxyStates[proxyStates.length - 1]).not.toBe(proxyRef.state)
+    proxyStates.push(proxyRef.state)
+    expect(clickCount).toBe(1)
+    expect(mouseOverCount).toBe(0)
+
+    TestUtils.Simulate.mouseOver(proxyNode)
+    // Mouseover updates state, render adds new ReactHigherEvent component
+    expect(renderCount).toBe(5)
+    // New component adds an onClick handler, which already existed
+    // So current state should not have changed
+    expect(proxyStates[proxyStates.length - 1]).toBe(proxyRef.state)
+    expect(mouseOverCount).toBe(1)
+    expect(stage2ClickCount).toBe(0)
+
+    TestUtils.Simulate.click(proxyNode)
+    expect(renderCount).toBe(5)
+    expect(clickCount).toBe(2)
+    expect(stage2ClickCount).toBe(1)
+
     mount.parentNode.removeChild(mount)
 
   })

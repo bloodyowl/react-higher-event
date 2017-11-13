@@ -1,7 +1,7 @@
 /* @flow */
 import React, { Component, Children } from "react"
 import type { Element as ReactElement } from "react"
-import ReactHigherEventContextTypes from "./ReactHigherEventContextTypes"
+import { ContextTypes } from "./ReactHigherEventTypes"
 
 class ReactHigherEvent extends Component<void, Props, void> {
   unsubscribers: { [key: string]: Function };
@@ -65,6 +65,6 @@ type Props = {
   children: ReactElement,
 }
 
-ReactHigherEvent.contextTypes = ReactHigherEventContextTypes
+ReactHigherEvent.contextTypes = ContextTypes
 
 export default ReactHigherEvent

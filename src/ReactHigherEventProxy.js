@@ -2,47 +2,36 @@
 import React, { Component } from "react"
 import { Element as ReactElement } from "react"
 
-import ReactHigherEventProxyContextTypes from "./ReactHigherEventProxyContextTypes"
+import { ProxyContextTypes } from "./ReactHigherEventTypes"
+import type { EventProps } from "./ReactHigherEventTypes"
 
-type EventProps = {
-  [key: string]: Function,
-}
-
-class ReactHigherEventProxy extends Component<void, Props, void> {
-  componentDidMount() {
-    const { higherEventProxy } = this.context
-    this.unsubscribe = higherEventProxy.subscribe(this.forceUpdate.bind(this))
+class ReactHigherEventProxy extends Component<void, Props, EventProps> {
+  unsubscribe: () => void;
+  state: EventProps = {};
+  componentWillMount() {
+    const { subscribe } = this.context.higherEventProxy
+    this.unsubscribe = subscribe(this.handleContextUpdate)
   }
   componentWillUnmount() {
     this.unsubscribe()
   }
-  getEventProps(): EventProps {
-    const { higherEventProxy } = this.context
-    const eventProps = {}
-    for (const [key] of higherEventProxy.events) {
-      eventProps[key] = (event) => {
-        if(this.props[key]) {
-          this.props[key](event)
-        }
-        higherEventProxy.handleEvent(key, event)
-      }
-    }
-    return eventProps
+  handleContextUpdate = (nextState: EventProps) => {
+    this.setState(nextState)
   }
   render(): ReactElement {
-    const { children, ...props } = this.props
+    const { children, handleRef, ...props } = this.props
     return (
-      <div {...props} {...this.getEventProps()}>
+      <div {...props} {...this.state} ref={handleRef}>
         {children}
       </div>
     )
   }
 }
-
-ReactHigherEventProxy.contextTypes = ReactHigherEventProxyContextTypes
+ReactHigherEventProxy.contextTypes = ProxyContextTypes
 
 type Props = {
   children?: any,
+  handleRef?: (ref: ?HTMLElement) => void,
 }
 
 export default ReactHigherEventProxy
