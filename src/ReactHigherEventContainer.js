@@ -46,8 +46,8 @@ class ReactHigherEventContainer extends Component<void, Props, State> {
         eventSubscribers.delete(handler)
         if(eventSubscribers.size === 0) {
           this.events.delete(eventType)
+          this.updateEventProp({ eventType, create: false })
         }
-        this.updateEventProp({ eventType, create: false })
       }
     }
   }
