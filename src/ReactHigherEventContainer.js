@@ -69,10 +69,12 @@ class ReactHigherEventContainer extends Component<void, Props, State> {
       }
     })
   }
+  lastNativeEvent: ?Event = null
   handleEvent(eventType: string, event: SyntheticEvent) {
-    if(!this.events.has(eventType)) {
+    if(!this.events.has(eventType) || event.nativeEvent === this.lastNativeEvent) {
       return
     }
+    this.lastNativeEvent = event.nativeEvent
     const subscribers = this.events.get(eventType)
     if(subscribers) {
       subscribers.forEach((func) => func(event))
