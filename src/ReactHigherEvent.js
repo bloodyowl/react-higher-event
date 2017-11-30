@@ -1,7 +1,7 @@
 /* @flow */
 import React, { Component, Children } from "react"
 import type { Element as ReactElement } from "react"
-import ReactHigherEventContextTypes from "./ReactHigherEventContextTypes"
+import { ContextTypes } from "./ReactHigherEventTypes"
 
 class ReactHigherEvent extends Component<void, Props, void> {
   unsubscribers: { [key: string]: Function };
@@ -22,13 +22,14 @@ class ReactHigherEvent extends Component<void, Props, void> {
   }
   componentWillReceiveProps(nextProps: Props) {
     const { higherEvent } = this.context
-    const previousKeys = new Set(Object.keys(this.props))
-    const nextKeys = new Set(Object.keys(nextProps))
-    previousKeys.forEach((key) => {
+    if(this.props === nextProps) {
+      return
+    }
+    Object.keys(this.props).forEach((key) => {
       if(key === "children") {
         return
       }
-      if(!nextKeys.has(key)) {
+      if(!nextProps[key]) {
         if(typeof this.unsubscribers[key] === "function") {
           this.unsubscribers[key]()
         }
@@ -44,11 +45,11 @@ class ReactHigherEvent extends Component<void, Props, void> {
         }
       }
     })
-    nextKeys.forEach((key) => {
+    Object.keys(nextProps).forEach((key) => {
       if(key === "children") {
         return
       }
-      if(!previousKeys.has(key)) {
+      if(!this.props[key]) {
         if(typeof nextProps[key] === "function") {
           this.unsubscribers[key] = higherEvent.subscribe(key, nextProps[key])
         }
@@ -65,6 +66,6 @@ type Props = {
   children: ReactElement,
 }
 
-ReactHigherEvent.contextTypes = ReactHigherEventContextTypes
+ReactHigherEvent.contextTypes = ContextTypes
 
 export default ReactHigherEvent
