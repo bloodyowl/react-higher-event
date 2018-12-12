@@ -7,6 +7,7 @@ import type { Context, ProxyContext, EventProps } from './ReactHigherEventTypes'
 type Props = {
     children?: React.Element<*>,
     component?: React.ElementType,
+    handleRef?: (?React.ElementRef<* | HTMLElement>) => void,
 }
 type State = EventProps
 type Handler = (event: SyntheticEvent<*>) => void
@@ -90,10 +91,10 @@ class ReactHigherEventContainer extends React.Component<Props, State> {
     }
 
     render() {
-        const { children, component, ...props } = this.props
+        const { children, component, handleRef, ...props } = this.props
         const Component = component || 'div'
         return (
-            <Component {...props} {...this.state}>
+            <Component {...props} {...this.state} ref={handleRef}>
                 {children}
             </Component>
         )

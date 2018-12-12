@@ -75,11 +75,11 @@ ReactDOM.render(
 )
 ```
 
-This component accepts children and a `component` property so you can replace the default `<div>` used.
+This component accepts children, a `component` property so you can replace the default `<div>` used, and a `handleRef` prop that will be used as the `ref` prop of the container component that gets rendered.
 
 ```javascript
 ReactDOM.render(
-    <ReactHigherEventContainer component={CustomThing}>
+    <ReactHigherEventContainer component={CustomThing} handleRef={handleContainerRef}>
         {/* my components */}
     </ReactHigherEventContainer>,
 )
