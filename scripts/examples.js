@@ -16,7 +16,7 @@ var config = {
     "examples/dropdown/index": "./examples/dropdown/index.js",
   },
   output: {
-    path: path.join(__dirname, "../../dist"),
+    path: path.join(__dirname, "../"),
     filename: "[name].js",
     publicPath: "/",
   },
@@ -51,7 +51,7 @@ server.listen(
   location.port,
   location.host,
   function() {
-    console.log(`open ${ serverUrl }/examples in your browser`)
+    console.log(`open ${ serverUrl }/examples/dropdown in your browser`)
   }
 )
 
