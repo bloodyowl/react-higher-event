@@ -340,14 +340,14 @@ describe('ReactHigherEventContainer', () => {
             }
         }
 
-        let proxyRef
         let proxyNode
-        const proxyStates = []
+        let proxyRef
+        let lastProxyState
+
         class IframeInside extends React.Component {
             handleProxyNode = (ref) => (proxyNode = ref)
 
             handleProxyRef = (ref) => {
-                if (ref) proxyStates.push(ref.state)
                 proxyRef = ref
             }
 
@@ -378,26 +378,28 @@ describe('ReactHigherEventContainer', () => {
 
         // Initial render adds onClick handler which triggers additional render
         expect(renderCount).toBe(2)
-        // Proxy state should have been updated since mounting from onClick handler
-        expect(proxyStates[proxyStates.length - 1]).not.toBe(proxyRef.state)
-        proxyStates.push(proxyRef.state)
+        lastProxyState = proxyRef.state
 
         TestUtils.Simulate.mouseOver(proxyNode)
+        // Mouseover handler not yet attached, should have done nothing
+        expect(mouseOverCount).toBe(0)
+        expect(lastProxyState).toBe(proxyRef.state)
+        expect(renderCount).toBe(2)
+
         TestUtils.Simulate.click(proxyNode)
         // Click updates state, render adds onMouseOver handler (2 renders)
         expect(renderCount).toBe(4)
         // New event type for eventProps triggers new state
-        expect(proxyStates[proxyStates.length - 1]).not.toBe(proxyRef.state)
-        proxyStates.push(proxyRef.state)
+        expect(lastProxyState).not.toBe(proxyRef.state)
+        lastProxyState = proxyRef.state
         expect(clickCount).toBe(1)
-        expect(mouseOverCount).toBe(0)
 
         TestUtils.Simulate.mouseOver(proxyNode)
         // Mouseover updates state, render adds new ReactHigherEvent component
         expect(renderCount).toBe(5)
         // New component adds an onClick handler, which already existed
         // So current state should not have changed
-        expect(proxyStates[proxyStates.length - 1]).toBe(proxyRef.state)
+        expect(lastProxyState).toBe(proxyRef.state)
         expect(mouseOverCount).toBe(1)
         expect(stage2ClickCount).toBe(0)
 
