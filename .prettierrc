@@ -1,0 +1,7 @@
+arrowParens: always
+singleQuote: true
+printWidth: 90
+tabWidth: 4
+trailingComma: all
+useTabs: false
+semi: false

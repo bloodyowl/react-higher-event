@@ -3,7 +3,7 @@ import type { Element as ReactElement } from "react"
 
 import ReactHigherEvent from "../../src/ReactHigherEvent"
 
-class Dropdown extends Component<void, Props, State> {
+class Dropdown extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
