@@ -4,4 +4,4 @@ import type { EventProps } from './ReactHigherEventTypes.js'
 
 const EventPropsContext = React.createContext<EventProps | null>(null)
 
-export default EventPropsContext
+export default (EventPropsContext: React$Context<EventProps | null>)

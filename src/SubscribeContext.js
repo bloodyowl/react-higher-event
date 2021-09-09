@@ -4,4 +4,4 @@ import type { Subscribe } from './ReactHigherEventTypes.js'
 
 const SubscribeContext = React.createContext<Subscribe | null>(null)
 
-export default SubscribeContext
+export default (SubscribeContext: React$Context<Subscribe | null>)

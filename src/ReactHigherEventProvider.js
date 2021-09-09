@@ -16,11 +16,12 @@ const { forwardRef, useContext, useEffect, useRef, useState } = React
 type Props = {
     children?: React.Node,
     component?: React.ElementType,
+    ...
 }
 
 const noop = () => {}
 
-const ReactHigherEventProvider = forwardRef(
+const ReactHigherEventProvider: React.ComponentType<Props> = forwardRef(
     ({ children, component, ...extraProps }: Props, ref) => {
         const eventsRef = useRef<Events | null>(null)
         const lastNativeEventRef = useRef<Event | null>(null)
@@ -87,6 +88,7 @@ const ReactHigherEventProvider = forwardRef(
         const Component = component || 'div'
 
         return (
+            // $FlowExpectedError cannot-spread-indexer from spreading eventProps
             <Component {...extraProps} {...eventProps} ref={ref}>
                 <EventPropsContext.Provider value={eventProps}>
                     <SubscribeContext.Provider value={subscribe}>
