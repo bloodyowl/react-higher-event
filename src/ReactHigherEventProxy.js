@@ -1,41 +1,22 @@
-/* @flow */
+// @flow
 import * as React from 'react'
-
-import { ProxyContextTypes } from './ReactHigherEventTypes'
+import EventPropsContext from './EventPropsContext.js'
 import type { EventProps } from './ReactHigherEventTypes'
 
-class ReactHigherEventProxy extends React.Component<Props, EventProps> {
-    unsubscribe: () => void
-    state: EventProps = {}
-
-    componentWillMount() {
-        const { subscribe } = this.context.higherEventProxy
-        this.unsubscribe = subscribe(this.handleContextUpdate)
-    }
-
-    componentWillUnmount() {
-        this.unsubscribe()
-    }
-
-    handleContextUpdate = (nextState: EventProps) => {
-        this.setState(nextState)
-    }
-
-    render() {
-        const { children, handleRef, ...props } = this.props
-        return (
-            <div {...props} {...this.state} ref={handleRef}>
-                {children}
-            </div>
-        )
-    }
-}
-
-ReactHigherEventProxy.contextTypes = ProxyContextTypes
+const { forwardRef, useContext } = React
 
 type Props = {
-    children?: React.Element<*>,
-    handleRef?: (ref: ?HTMLElement) => void,
+    children: React.Node,
 }
+
+const ReactHigherEventProxy = forwardRef(({ children, ...extraProps }: Props, ref) => {
+    const eventProps = useContext(EventPropsContext)
+
+    return (
+        <div {...extraProps} {...eventProps} ref={ref}>
+            {children}
+        </div>
+    )
+})
 
 export default ReactHigherEventProxy

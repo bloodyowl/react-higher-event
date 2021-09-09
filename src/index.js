@@ -1,7 +1,6 @@
-import ReactHigherEvent from './ReactHigherEvent'
-import ReactHigherEventContainer from './ReactHigherEventContainer'
-import ReactHigherEventProxy from './ReactHigherEventProxy'
+// @flow
+import ReactHigherEvent from './ReactHigherEvent.js'
+import ReactHigherEventProvider from './ReactHigherEventProvider.js'
+import ReactHigherEventProxy from './ReactHigherEventProxy.js'
 
-export { ReactHigherEvent }
-export { ReactHigherEventContainer }
-export { ReactHigherEventProxy }
+export { ReactHigherEvent, ReactHigherEventProvider, ReactHigherEventProxy }

@@ -1,73 +1,83 @@
-/* @flow */
+// @flow
 import * as React from 'react'
-import { ContextTypes } from './ReactHigherEventTypes'
+import SubscribeContext from './SubscribeContext.js'
+import type { EventProps } from './ReactHigherEventTypes.js'
 
-class ReactHigherEvent extends React.Component<Props, void> {
-    unsubscribers: { [key: string]: Function }
+const { Children, useContext, useEffect, useRef } = React
 
-    componentDidMount() {
-        const { higherEvent } = this.context
-        const { children, ...props } = this.props
-        this.unsubscribers = Object.keys(props).reduce((acc, eventType) => {
-            if (typeof props[eventType] === 'function') {
-                acc[eventType] = higherEvent.subscribe(eventType, props[eventType])
-            }
-            return acc
-        }, {})
-    }
+type Props = {|
+    ...EventProps,
+    children: React.Node,
+|}
 
-    componentWillUnmount() {
-        Object.keys(this.unsubscribers).forEach((key) => {
-            this.unsubscribers[key]()
-        })
-    }
+type Unsubscribers = {| [eventName: string]: () => void |}
 
-    componentWillReceiveProps(nextProps: Props) {
-        if (this.props === nextProps) return
+const ReactHigherEvent = (props: Props) => {
+    const subscribe = useContext(SubscribeContext)
+    const unsubscribersRef = useRef<Unsubscribers | null>(null)
+    const previousPropsRef = useRef<Props | null>(null)
 
-        const { subscribe } = this.context.higherEvent
+    useEffect(() => {
+        unsubscribersRef.current = {}
+        // On unmount, call any remaining cleanup functions
+        return () => {
+            const unsubscribers = unsubscribersRef.current
+            if (!unsubscribers) return
+            Object.keys(unsubscribers).forEach((key) => {
+                unsubscribers[key]()
+            })
+        }
+    }, [])
 
-        Object.keys(this.props).forEach((key) => {
+    // On props changes, call cleanup for any changed handlers and subscribe any new
+    useEffect(() => {
+        if (!subscribe) return
+
+        const unsubscribers = unsubscribersRef.current || {}
+        const previousProps = previousPropsRef.current || {}
+        previousPropsRef.current = props
+
+        let previousKeys = Object.keys(previousProps)
+        let currentKeys = Object.keys(props)
+        let unhandledCurrentKeysCount = currentKeys.length
+
+        previousKeys.forEach((key) => {
             if (key === 'children') return
 
-            if (!nextProps[key]) {
-                if (typeof this.unsubscribers[key] === 'function') {
-                    this.unsubscribers[key]()
-                }
-                delete this.unsubscribers[key]
+            if (props[key]) {
+                unhandledCurrentKeysCount--
             }
 
-            if (nextProps[key] !== this.props[key]) {
-                if (typeof this.unsubscribers[key] === 'function') {
-                    this.unsubscribers[key]()
-                }
-                delete this.unsubscribers[key]
-                if (typeof nextProps[key] === 'function') {
-                    this.unsubscribers[key] = subscribe(key, nextProps[key])
-                }
+            if (props[key] === previousProps[key]) return
+
+            // If this event handler has changed, call previous handler’s cleanup function
+            if (unsubscribers[key]) {
+                unsubscribers[key]()
+                delete unsubscribers[key]
             }
+
+            // If event handler doesn’t exist in current props, no need to do anything else
+            if (!props[key]) return
+
+            // Subscribe the new handler to the event and capture its cleanup function
+            unsubscribers[key] = subscribe(key, props[key])
         })
 
-        Object.keys(nextProps).forEach((key) => {
+        // If we already handled all new subscriptions, no need to do anything else
+        if (!unhandledCurrentKeysCount) return
+
+        currentKeys.forEach((key) => {
             if (key === 'children') return
+            // If key exists in previousProps, we already handled it above
+            if (previousProps[key]) return
+            // If new value is falsey, we already cleaned up above, nothing else to do
+            if (!props[key]) return
 
-            if (!this.props[key]) {
-                if (typeof nextProps[key] === 'function') {
-                    this.unsubscribers[key] = subscribe(key, nextProps[key])
-                }
-            }
+            unsubscribers[key] = subscribe(key, props[key])
         })
-    }
-    render() {
-        return React.Children.only(this.props.children)
-    }
-}
+    }, [props, subscribe])
 
-type Props = {
-    [key: string]: Function,
-    children: React.Element<*>,
+    return Children.only(props.children)
 }
-
-ReactHigherEvent.contextTypes = ContextTypes
 
 export default ReactHigherEvent
