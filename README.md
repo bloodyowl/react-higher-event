@@ -42,7 +42,7 @@ class MyComponent extends React.Component {
 }
 ```
 
-ReactHigherEvent solves this issue by using the React event system and making it accessible declaratively anywhere. Just pass your listener as a prop to `<ReactHigherEvent>`, and it will work!
+ReactHigherEvent solves this issue by using the React event system and making it accessible declaratively anywhere. Just pass your listener as a prop to `<ReactHigherEvent>`, which you can use as a transparent component wrapper wherever you want in your component tree, and it will work!
 
 ## Install
 
@@ -56,12 +56,12 @@ $ npm install --save react-higher-event
 // ES5/commonJS
 var ReactHigherEvent = require('react-higher-event')
 // ES6
-import { ReactHigherEvent, ReactHigherEventContainer } from 'react-higher-event'
+import { ReactHigherEvent, ReactHigherEventProvider } from 'react-higher-event'
 ```
 
 ## Usage
 
-### ReactHigherEventContainer
+### ReactHigherEventProvider
 
 Put this component at the root of your app so that it can listen to events at the top.
 
@@ -69,19 +69,19 @@ Put this component at the root of your app so that it can listen to events at th
 
 ```javascript
 ReactDOM.render(
-    <ReactHigherEventContainer>
+    <ReactHigherEventProvider>
         {/* my components */}
-    </ReactHigherEventContainer>,
+    </ReactHigherEventProvider>,
 )
 ```
 
-This component accepts children, a `component` property so you can replace the default `<div>` used, and a `handleRef` prop that will be used as the `ref` prop of the container component that gets rendered.
+This component accepts children, a `component` property so you can replace the default `<div>` used, and uses [ref forwarding](https://reactjs.org/docs/forwarding-refs.html) to pass any ref along to the `ref` prop of the container component that gets rendered.
 
 ```javascript
 ReactDOM.render(
-    <ReactHigherEventContainer component={CustomThing} handleRef={handleContainerRef}>
+    <ReactHigherEventProvider component={CustomThing} ref={handleContainerRef}>
         {/* my components */}
-    </ReactHigherEventContainer>,
+    </ReactHigherEventProvider>,
 )
 ```
 
@@ -92,6 +92,6 @@ Use this component where you want to listen to higher events:
 ```javascript
 <ReactHigherEvent onClick={this.handleGlobalClick}>
     {/* if you want to avoid triggering the “higher event”, you will want to stopPropagating from your component */}
-    <div onClick={(event) => event.stopPropagation()}>helloworld</div>
+    <div onClick={(event) => event.stopPropagation()}>hello world</div>
 </ReactHigherEvent>
 ```

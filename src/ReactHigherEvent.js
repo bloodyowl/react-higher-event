@@ -1,4 +1,6 @@
 // @flow
+// TODO why only allow a single children element?
+// what happens with <ReactHigherEvent><img /><caption /></ReactHigherEvent>?
 import * as React from 'react'
 import SubscribeContext from './SubscribeContext.js'
 import type { EventProps } from './ReactHigherEventTypes.js'
