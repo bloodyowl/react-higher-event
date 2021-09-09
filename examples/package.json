@@ -1,0 +1,21 @@
+{
+    "name": "react-higher-event-examples",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "SKIP_PREFLIGHT_CHECK=true react-scripts start",
+        "build": "SKIP_PREFLIGHT_CHECK=true react-scripts build",
+        "eject": "react-scripts eject"
+    },
+    "dependencies": {
+        "react": "link:../node_modules/react",
+        "react-dom": "link:../node_modules/react-dom",
+        "react-higher-event": "link:..",
+        "react-scripts": "^5.0.0-next.37 || ^5"
+    },
+    "browserslist": [
+        "last 1 chrome version",
+        "last 1 firefox version",
+        "last 1 safari version"
+    ]
+}
