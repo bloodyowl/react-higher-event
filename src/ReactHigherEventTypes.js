@@ -1,35 +1,14 @@
-/* @flow */
-import PropTypes from 'prop-types'
+// @flow
+export type EventHandler = (event: SyntheticEvent<>) => mixed
 
-export const ContextTypes = {
-    higherEvent: PropTypes.shape({
-        subscribe: PropTypes.func.isRequired,
-    }).isRequired,
-}
+export type EventProps = {|
+    [eventName: string]: EventHandler,
+|}
 
-export const ProxyContextTypes = {
-    higherEventProxy: PropTypes.shape({
-        subscribe: PropTypes.func.isRequired,
-    }).isRequired,
-}
+export type Events = Map<string, Set<EventHandler>>
 
-export type EventProps = {
-    [eventType: string]: (event: SyntheticEvent<*>) => void,
-}
+export type EventDispatcher = (eventName: string, event: SyntheticEvent<>) => mixed
 
-export type Context = {
-    higherEvent: {
-        subscribe: (
-            eventType: string,
-            handler: (event: SyntheticEvent<*>) => void,
-        ) => Function,
-    },
-}
+export type Unsubscribe = () => void
 
-export type ProxyContext = {
-    higherEventProxy: {
-        subscribe: ProxySubscribe,
-    },
-}
-
-export type ProxySubscribe = (handler: (p: EventProps) => void) => Function
+export type Subscribe = (eventName: string, handler: EventHandler) => Unsubscribe
