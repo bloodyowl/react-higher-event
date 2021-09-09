@@ -1,9 +1,9 @@
 // @flow
 export type EventHandler = (event: SyntheticEvent<>) => mixed
 
-export type EventProps = {|
+export type EventProps = {
     [eventName: string]: EventHandler,
-|}
+}
 
 export type Events = Map<string, Set<EventHandler>>
 

@@ -7,12 +7,12 @@ import type { EventProps } from './ReactHigherEventTypes.js'
 
 const { Children, useContext, useEffect, useRef } = React
 
-type Props = {|
+type Props = {
     ...EventProps,
     children: React.Node,
-|}
+}
 
-type Unsubscribers = {| [eventName: string]: () => void |}
+type Unsubscribers = { [eventName: string]: () => void }
 
 const ReactHigherEvent = (props: Props) => {
     const subscribe = useContext(SubscribeContext)
@@ -82,4 +82,4 @@ const ReactHigherEvent = (props: Props) => {
     return Children.only(props.children)
 }
 
-export default ReactHigherEvent
+export default (ReactHigherEvent: React.ComponentType<Props>)

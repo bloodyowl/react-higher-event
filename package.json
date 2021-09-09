@@ -11,7 +11,7 @@
         "examples": "cd examples && yarn && yarn start",
         "test": "jest",
         "test:watch": "jest --watch",
-        "pub": "yarn test && yarn build && yarn publish",
+        "pub": "yarn test && yarn flow && yarn build && yarn publish",
         "flow": "flow"
     },
     "repository": "https://github.com/bloodyowl/react-higher-event.git",
@@ -34,7 +34,7 @@
         "@babel/preset-react": "^7.14.5",
         "@testing-library/jest-dom": "^5.14.1",
         "@testing-library/react": "^12.0.0",
-        "flow-bin": "^0.88.0",
+        "flow-bin": "^0.159.0",
         "jest-cli": "^27.1.1",
         "react": "^17.0.2",
         "react-dom": "^17.0.2"

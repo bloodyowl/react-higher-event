@@ -7,6 +7,7 @@ const { forwardRef, useContext } = React
 
 type Props = {
     children: React.Node,
+    ...
 }
 
 const ReactHigherEventProxy = forwardRef(({ children, ...extraProps }: Props, ref) => {
@@ -19,4 +20,4 @@ const ReactHigherEventProxy = forwardRef(({ children, ...extraProps }: Props, re
     )
 })
 
-export default ReactHigherEventProxy
+export default (ReactHigherEventProxy: React.ComponentType<Props>)
