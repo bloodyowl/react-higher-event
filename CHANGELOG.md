@@ -1,3 +1,7 @@
+# 3.0.1 - 2021-09-09
+
+-   Allow passing any number of children to the `ReactHigherEvent` component (previously it used `React.Children.only(children)` to restrict it to one)
+
 # 3.0.0 - 2021-09-09
 
 ## Breaking Changes
