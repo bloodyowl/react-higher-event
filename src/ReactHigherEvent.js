@@ -1,11 +1,9 @@
 // @flow
-// TODO why only allow a single children element?
-// what happens with <ReactHigherEvent><img /><caption /></ReactHigherEvent>?
 import * as React from 'react'
 import SubscribeContext from './SubscribeContext.js'
 import type { EventProps } from './ReactHigherEventTypes.js'
 
-const { Children, useContext, useEffect, useRef } = React
+const { useContext, useEffect, useRef } = React
 
 type Props = {
     ...EventProps,
@@ -79,7 +77,7 @@ const ReactHigherEvent = (props: Props) => {
         })
     }, [props, subscribe])
 
-    return Children.only(props.children)
+    return props.children
 }
 
 export default (ReactHigherEvent: React.ComponentType<Props>)
