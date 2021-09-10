@@ -9,9 +9,6 @@ type State = {
 }
 
 const styles = {
-    container: {
-        position: 'relative',
-    },
     button: {
         padding: 10,
         background: '#eee',
@@ -28,14 +25,10 @@ const styles = {
         borderBottomRightRadius: 0,
     },
     drawer: {
-        position: 'absolute',
-        top: '100%',
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
         padding: 10,
         background: '#ccc',
-        left: 0,
-        right: 0,
     },
     drawerItem: {
         padding: 10,
@@ -73,23 +66,22 @@ class Dropdown extends Component<Props, State> {
         const { isOpened } = this.state
         return (
             <ReactHigherEvent onClick={isOpened && this.close}>
-                <div onClick={this.open} style={styles.container}>
-                    <div
-                        style={{
-                            ...styles.button,
-                            ...(isOpened ? styles.openedButton : null),
-                        }}
-                    >
-                        Open dropdown
-                    </div>
-                    {isOpened && (
-                        <div style={styles.drawer} onClick={this.handleClick}>
-                            <div style={styles.drawerItem}>one</div>
-                            <div style={styles.drawerItem}>two</div>
-                            <div style={styles.drawerItem}>three</div>
-                        </div>
-                    )}
+                <div
+                    onClick={this.open}
+                    style={{
+                        ...styles.button,
+                        ...(isOpened ? styles.openedButton : null),
+                    }}
+                >
+                    Open dropdown
                 </div>
+                {isOpened && (
+                    <div style={styles.drawer} onClick={this.handleClick}>
+                        <div style={styles.drawerItem}>one</div>
+                        <div style={styles.drawerItem}>two</div>
+                        <div style={styles.drawerItem}>three</div>
+                    </div>
+                )}
             </ReactHigherEvent>
         )
     }
