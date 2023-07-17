@@ -52,8 +52,13 @@ export default function Dropdown(props: Props) {
         setIsOpened(false)
     }
 
+    const handleKeyDownHigher = (event: KeyboardEvent) => {
+        if (!isOpened || event.code !== 'Escape') return
+        setIsOpened(false)
+    }
+
     return (
-        <ReactHigherEvent onClick={handleClickHigher}>
+        <ReactHigherEvent onClick={handleClickHigher} onKeyDown={handleKeyDownHigher}>
             <div
                 onClick={handleClickButton}
                 style={{

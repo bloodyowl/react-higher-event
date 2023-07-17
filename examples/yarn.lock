@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@acusti/use-keyboard-events@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@acusti/use-keyboard-events/-/use-keyboard-events-0.2.0.tgz#6b58b3aa204f1caf703bb537f3d9a7e5af71a145"
+  integrity sha512-wqNMJJHbPJ/43gEhTUTcqWdoppwtei/DWCyTI/vCFPI/NvYKTUn4peWHdycpU4A/8v2ff9MfjKmaMRxb4OHxJw==
+
 "@apideck/better-ajv-errors@^0.2.4":
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/@apideck/better-ajv-errors/-/better-ajv-errors-0.2.5.tgz#b9c0092b7f7f23c356a0a31600334f7b8958458b"

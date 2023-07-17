@@ -21,7 +21,7 @@ export default function App() {
                 <li>
                     <h3>Dropdown</h3>
                     <p>
-                        <small>(click outside to close)</small>
+                        <small>(click outside or hit Esc to close)</small>
                     </p>
                     <Dropdown />
                 </li>
