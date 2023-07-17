@@ -1,3 +1,25 @@
+# 4.0.0 - 2023-07-17
+
+## Breaking Changes
+
+-   Refactored handling of
+    [KeyboardEvents](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent)
+    to use
+    [@acusti/use-keyboard-events](https://github.com/acusti/uikit/tree/main/packages/use-keyboard-events)
+    so that all keyboard events are captured
+-   As a result, the event payload passed to `onKeyDown`, `onKeyPress`, and
+    `onKeyUp` handlers is now the browser native `KeyboardEvent` object,
+    not the React `SyntheticEvent` object
+-   Migrated published package from CommonJS → ESM
+
+## Improvements
+
+-   Upgraded dev dependencies to the latest versions of React/ReactDOM
+    (18.2.0), @testing-library/react (14.0.0), and babel (7.22.6)
+-   Added prettier to dev dependencies and added a `format` run script
+-   Migrated the test runner from jest → vitest
+-   Migrated to using the @babel/preset-env preset
+
 # 3.0.1 - 2021-09-09
 
 -   Allow passing any number of children to the `ReactHigherEvent`
