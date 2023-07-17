@@ -10,8 +10,8 @@
         "build": "rm -fr lib/ && babel src --out-dir lib --ignore 'src/**/*.test.js'",
         "examples": "yarn build && cd examples && yarn && yarn start",
         "format": "prettier --write package.json README.md CHANGELOG.md ./examples/src/ ./src/",
-        "test": "jest",
-        "test:watch": "jest --watch",
+        "test": "vitest run",
+        "test:watch": "vitest",
         "pub": "yarn test && yarn flow && yarn build && yarn publish",
         "flow": "flow"
     },
@@ -33,14 +33,16 @@
         "@babel/plugin-transform-parameters": "^7.22.5",
         "@babel/preset-flow": "^7.22.5",
         "@babel/preset-react": "^7.22.5",
-        "@testing-library/jest-dom": "^5.16.5",
+        "@bunchtogether/vite-plugin-flow": "^1.0.2",
+        "@rollup/plugin-babel": "^6.0.3",
         "@testing-library/react": "^14.0.0",
         "flow-bin": "^0.159.0",
-        "jest-cli": "^29.6.1",
-        "jest-environment-jsdom": "^29.6.1",
+        "jsdom": "^22.1.0",
         "prettier": "^3.0.0",
         "react": "^18",
-        "react-dom": "^18"
+        "react-dom": "^18",
+        "vite": "^4.4.4",
+        "vitest": "^0.33.0"
     },
     "dependencies": {
         "@acusti/use-keyboard-events": "^0.2.0"
@@ -48,12 +50,6 @@
     "peerDependencies": {
         "react": "^16.3.0 || ^17 || ^18",
         "react-dom": "^16.3.0 || ^17 || ^18"
-    },
-    "jest": {
-        "testEnvironment": "jsdom",
-        "testPathIgnorePatterns": [
-            "<rootDir>/lib/"
-        ]
     },
     "babel": {
         "presets": [

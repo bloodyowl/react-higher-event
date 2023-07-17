@@ -1,7 +1,7 @@
-import '@testing-library/jest-dom'
-import { render, fireEvent, waitFor, screen } from '@testing-library/react'
+import { cleanup, render, fireEvent, waitFor, screen } from '@testing-library/react'
 import React from 'react'
 import { createPortal } from 'react-dom'
+import { afterEach, describe, expect, it } from 'vitest'
 
 import {
     ReactHigherEvent,
@@ -39,6 +39,10 @@ class IframePortal extends React.Component {
 }
 
 describe('ReactHigherEventProvider', () => {
+    afterEach(() => {
+        cleanup()
+    })
+
     it('lets components handle higher events', () => {
         class ReceiverComponent extends React.Component {
             handleGlobalClick = (event) => {
