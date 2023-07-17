@@ -27,10 +27,7 @@
     "devDependencies": {
         "@babel/cli": "^7.22.6",
         "@babel/core": "^7.22.6",
-        "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
-        "@babel/plugin-transform-destructuring": "^7.22.5",
-        "@babel/plugin-transform-modules-commonjs": "^7.22.5",
-        "@babel/plugin-transform-parameters": "^7.22.5",
+        "@babel/preset-env": "^7.22.9",
         "@babel/preset-flow": "^7.22.5",
         "@babel/preset-react": "^7.22.5",
         "@bunchtogether/vite-plugin-flow": "^1.0.2",
@@ -53,14 +50,10 @@
     },
     "babel": {
         "presets": [
+            "@babel/preset-env",
             "@babel/preset-flow",
             "@babel/preset-react"
         ],
-        "plugins": [
-            "@babel/plugin-transform-modules-commonjs",
-            "@babel/plugin-transform-destructuring",
-            "@babel/plugin-transform-parameters",
-            "@babel/plugin-proposal-object-rest-spread"
-        ]
+        "targets": "> 1%, not dead"
     }
 }
