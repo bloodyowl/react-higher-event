@@ -6,6 +6,10 @@ trailingComma: all
 useTabs: false
 semi: false
 overrides:
-- files: "*.js"
-  options:
-    parser: flow
+    - files: '*.js'
+      options:
+          parser: flow
+    - files: ['*.md', '*.mdx', '*.markdown']
+      options:
+          printWidth: 75
+          proseWrap: always

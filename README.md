@@ -4,7 +4,10 @@
 
 ## What issues does it solve?
 
-The React synthetic event system doesn’t interact in the same event loop as plain DOM events. This means that listeners attached using `addEventListener` in your lifecycles hooks will not be in the same phase as the ones you declare using React props.
+The React synthetic event system doesn’t interact in the same event loop as
+plain DOM events. This means that listeners attached using
+`addEventListener` in your lifecycles hooks will not be in the same phase
+as the ones you declare using React props.
 
 ```javascript
 class MyComponent extends React.Component {
@@ -42,7 +45,10 @@ class MyComponent extends React.Component {
 }
 ```
 
-ReactHigherEvent solves this issue by using the React event system and making it accessible declaratively anywhere. Just pass your listener as a prop to `<ReactHigherEvent>`, which you can use as a transparent component wrapper wherever you want in your component tree, and it will work!
+ReactHigherEvent solves this issue by using the React event system and
+making it accessible declaratively anywhere. Just pass your listener as a
+prop to `<ReactHigherEvent>`, which you can use as a transparent component
+wrapper wherever you want in your component tree, and it will work!
 
 ## Install
 
@@ -56,16 +62,21 @@ $ npm install --save react-higher-event
 // ES5/commonJS
 var ReactHigherEvent = require('react-higher-event')
 // ES6
-import { ReactHigherEvent, ReactHigherEventProvider } from 'react-higher-event'
+import {
+    ReactHigherEvent,
+    ReactHigherEventProvider,
+} from 'react-higher-event'
 ```
 
 ## Usage
 
 ### ReactHigherEventProvider
 
-Put this component at the root of your app so that it can listen to events at the top.
+Put this component at the root of your app so that it can listen to events
+at the top.
 
-> NOTE: You can pass some style/className to ensure it covers the whole document
+> NOTE: You can pass some style/className to ensure it covers the whole
+> document
 
 ```javascript
 ReactDOM.render(
@@ -75,11 +86,17 @@ ReactDOM.render(
 )
 ```
 
-This component accepts children, a `component` property so you can replace the default `<div>` used, and uses [ref forwarding](https://reactjs.org/docs/forwarding-refs.html) to pass any ref along to the `ref` prop of the container component that gets rendered.
+This component accepts children, a `component` property so you can replace
+the default `<div>` used, and uses
+[ref forwarding](https://reactjs.org/docs/forwarding-refs.html) to pass any
+ref along to the `ref` prop of the container component that gets rendered.
 
 ```javascript
 ReactDOM.render(
-    <ReactHigherEventProvider component={CustomThing} ref={handleContainerRef}>
+    <ReactHigherEventProvider
+        component={CustomThing}
+        ref={handleContainerRef}
+    >
         {/* my components */}
     </ReactHigherEventProvider>,
 )
