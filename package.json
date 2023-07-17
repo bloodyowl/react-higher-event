@@ -9,6 +9,7 @@
     "scripts": {
         "build": "rm -fr lib/ && babel src --out-dir lib --ignore='__tests__'",
         "examples": "yarn build && cd examples && yarn && yarn start",
+        "format": "prettier --write package.json README.md CHANGELOG.md ./examples/src/ ./src/",
         "test": "jest",
         "test:watch": "jest --watch",
         "pub": "yarn test && yarn flow && yarn build && yarn publish",
@@ -36,6 +37,7 @@
         "@testing-library/react": "^12.0.0",
         "flow-bin": "^0.159.0",
         "jest-cli": "^27.1.1",
+        "prettier": "^3.0.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2"
     },

@@ -5,3 +5,7 @@ tabWidth: 4
 trailingComma: all
 useTabs: false
 semi: false
+overrides:
+- files: "*.js"
+  options:
+    parser: flow
