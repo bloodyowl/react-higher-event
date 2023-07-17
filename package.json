@@ -2,6 +2,9 @@
     "name": "react-higher-event",
     "version": "4.0.0-pre2",
     "description": "Declarative React API to listen to higher events",
+    "type": "module",
+    "sideEffects": false,
+    "exports": "lib/index.js",
     "main": "lib/index.js",
     "files": [
         "lib"
@@ -50,10 +53,19 @@
     },
     "babel": {
         "presets": [
-            "@babel/preset-env",
             "@babel/preset-flow",
-            "@babel/preset-react"
+            "@babel/preset-react",
+            [
+                "@babel/preset-env",
+                {
+                    "bugfixes": true,
+                    "modules": false
+                }
+            ]
         ],
-        "targets": "> 1%, not dead"
+        "targets": {
+            "browsers": "> 1%, not dead",
+            "esmodules": true
+        }
     }
 }
