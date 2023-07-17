@@ -1,5 +1,7 @@
 // @flow
-export type EventHandler = (event: SyntheticEvent<>) => mixed
+type EventType = SyntheticEvent<> | KeyboardEvent
+
+export type EventHandler = (event: EventType) => mixed
 
 export type EventProps = {
     [eventName: string]: EventHandler,
@@ -7,7 +9,7 @@ export type EventProps = {
 
 export type Events = Map<string, Set<EventHandler>>
 
-export type EventDispatcher = (eventName: string, event: SyntheticEvent<>) => mixed
+export type EventDispatcher = (eventName: string, event: EventType) => mixed
 
 export type Unsubscribe = () => void
 
