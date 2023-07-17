@@ -75,12 +75,13 @@ import {
 Put this component at the root of your app so that it can listen to events
 at the top.
 
-> NOTE: You can pass some style/className to ensure it covers the whole
-> document
+> NOTE: Any props you pass in other than `props.component` will be directly
+> applied to the root DOM element, so you can pass in styles or a className
+> (e.g. to ensure it covers the whole document)
 
 ```javascript
 ReactDOM.render(
-    <ReactHigherEventProvider>
+    <ReactHigherEventProvider className="app-root">
         {/* my components */}
     </ReactHigherEventProvider>,
 )
