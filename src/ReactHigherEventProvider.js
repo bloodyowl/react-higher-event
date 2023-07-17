@@ -11,7 +11,7 @@ import type {
     Subscribe,
 } from './ReactHigherEventTypes.js'
 
-const { forwardRef, useContext, useEffect, useRef, useState } = React
+const { forwardRef, useCallback, useRef, useState } = React
 
 type Props = {
     children?: React.Node,
@@ -19,21 +19,16 @@ type Props = {
     ...
 }
 
-const noop = () => {}
-
 const ReactHigherEventProvider: React.ComponentType<Props> = forwardRef(
     ({ children, component, ...extraProps }: Props, ref) => {
-        const eventsRef = useRef<Events | null>(null)
+        const eventsRef = useRef<Events>(new Map())
         const lastNativeEventRef = useRef<Event | null>(null)
 
         const [eventProps, setEventProps] = useState<EventProps>(({}: any))
-        const [subscribe, setSubscribe] = useState<Subscribe | null>(null)
 
-        useEffect(() => {
-            eventsRef.current = new Map()
-
-            const dispatchEvent = (eventName: string, event: SyntheticEvent<>) => {
-                const events: Events = (eventsRef.current: any)
+        const dispatchEvent = useCallback(
+            (eventName: string, event: SyntheticEvent<>) => {
+                const events: Events = eventsRef.current
                 const handlers = events.get(eventName)
                 // Check nativeEvent to make sure we haven’t already handled this event
                 if (!handlers || event.nativeEvent === lastNativeEventRef.current) {
@@ -41,12 +36,13 @@ const ReactHigherEventProvider: React.ComponentType<Props> = forwardRef(
                 }
                 lastNativeEventRef.current = event.nativeEvent
                 handlers.forEach((handler) => handler(event))
-            }
+            },
+            [],
+        )
 
-            // When a function is passed to setState, it’s treated as an updater function
-            // https://reactjs.org/docs/hooks-reference.html#functional-updates
-            setSubscribe((): Subscribe => (eventName: string, handler: EventHandler) => {
-                const events: Events = (eventsRef.current: any)
+        const subscribe = useCallback<Subscribe>(
+            (eventName: string, handler: EventHandler) => {
+                const events: Events = eventsRef.current
                 let eventHandlers = events.get(eventName)
 
                 if (!eventHandlers) {
@@ -82,8 +78,9 @@ const ReactHigherEventProvider: React.ComponentType<Props> = forwardRef(
                         })
                     }
                 }
-            })
-        }, [])
+            },
+            [],
+        )
 
         const Component = component || 'div'
 
