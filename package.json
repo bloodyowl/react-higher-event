@@ -7,7 +7,7 @@
         "lib"
     ],
     "scripts": {
-        "build": "rm -fr lib/ && babel src --out-dir lib --ignore='__tests__'",
+        "build": "rm -fr lib/ && babel src --out-dir lib --ignore 'src/**/*.test.js'",
         "examples": "yarn build && cd examples && yarn && yarn start",
         "format": "prettier --write package.json README.md CHANGELOG.md ./examples/src/ ./src/",
         "test": "jest",
