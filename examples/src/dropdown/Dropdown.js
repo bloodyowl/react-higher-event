@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import { ReactHigherEvent } from 'react-higher-event'
 
@@ -36,55 +36,40 @@ const styles = {
     },
 }
 
-class Dropdown extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props)
-        this.state = {
-            isOpened: false,
-        }
-        this.open = this.open.bind(this)
-        this.close = this.close.bind(this)
-    }
+const stopPropagation = (event) => event.stopPropagation()
 
-    open() {
-        this.setState({
-            isOpened: true,
-        })
-    }
+export default function Dropdown(props: Props) {
+    const [isOpened, setIsOpened] = React.useState(false)
 
-    close() {
-        this.setState({
-            isOpened: false,
-        })
-    }
-
-    handleClick(event) {
+    const handleClickButton = (event) => {
+        if (isOpened) return
         event.stopPropagation()
+        setIsOpened(true)
     }
 
-    render() {
-        const { isOpened } = this.state
-        return (
-            <ReactHigherEvent onClick={isOpened && this.close}>
-                <div
-                    onClick={this.open}
-                    style={{
-                        ...styles.button,
-                        ...(isOpened ? styles.openedButton : null),
-                    }}
-                >
-                    Open dropdown
+    const handleClickHigher = () => {
+        if (!isOpened) return
+        setIsOpened(false)
+    }
+
+    return (
+        <ReactHigherEvent onClick={handleClickHigher}>
+            <div
+                onClick={handleClickButton}
+                style={{
+                    ...styles.button,
+                    ...(isOpened ? styles.openedButton : null),
+                }}
+            >
+                Open dropdown
+            </div>
+            {isOpened && (
+                <div onClick={stopPropagation} style={styles.drawer}>
+                    <div style={styles.drawerItem}>one</div>
+                    <div style={styles.drawerItem}>two</div>
+                    <div style={styles.drawerItem}>three</div>
                 </div>
-                {isOpened && (
-                    <div style={styles.drawer} onClick={this.handleClick}>
-                        <div style={styles.drawerItem}>one</div>
-                        <div style={styles.drawerItem}>two</div>
-                        <div style={styles.drawerItem}>three</div>
-                    </div>
-                )}
-            </ReactHigherEvent>
-        )
-    }
+            )}
+        </ReactHigherEvent>
+    )
 }
-
-export default Dropdown
