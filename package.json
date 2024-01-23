@@ -1,6 +1,6 @@
 {
     "name": "react-higher-event",
-    "version": "4.2.0",
+    "version": "4.3.0",
     "description": "Declarative React API to listen to higher events",
     "type": "module",
     "sideEffects": false,
