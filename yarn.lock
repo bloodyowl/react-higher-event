@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@acusti/use-keyboard-events@^0.5.1":
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@acusti/use-keyboard-events/-/use-keyboard-events-0.5.1.tgz#cfd4fcbfaf59f1ee7b23535f6020a2860e14b0c0"
-  integrity sha512-yfe8TxkIqRss9yHFi5wiH72KYz5VKeSZ33yHXEkGkFHr0ZB0LSMt/f6o5t/E6le63iyVVRkltXsSZ07h7q1A1g==
+"@acusti/use-keyboard-events@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@acusti/use-keyboard-events/-/use-keyboard-events-0.6.0.tgz#af76fbd05ebd2c8f0389458b2aa5ebf663d07707"
+  integrity sha512-DxblF3u4QmtTZ6ah87uQ7FsoeoWR6JfOnJkDm4dfRftHlz7wyspdxyEFPcko7UlhEbcydotFhoJKUU2yQh/8yQ==
 
 "@ampproject/remapping@^2.2.0":
   version "2.2.1"
